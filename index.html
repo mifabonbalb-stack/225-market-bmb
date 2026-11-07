@@ -1,0 +1,153 @@
+Put your HTML text here<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>225 Market BMB</title>
+<style>
+*{box-sizing:border-box;font-family:Arial} body{margin:0;background:#fff}
+.top{background:#fff;padding:15px;text-align:center;border-bottom:3px solid #FF7A00}
+.logo{font-size:50px;font-weight:900;line-height:1}.orange{color:#FF7A00}.vert{color:#009A44}
+.btn{width:100%;background:#FF7A00;color:#fff;border:none;padding:15px;border-radius:10px;font-size:17px;font-weight:bold;margin-top:10px}
+.btnVert{background:#009A44} input,select,textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
+.card{border:1px solid #eee;border-radius:15px;padding:12px;margin:10px;display:flex;gap:12px;align-items:center}
+.card img{width:80px;height:80px;object-fit:cover;border-radius:10px}
+.prix{color:#FF7A00;font-weight:900} .filtre{padding:8px 12px;border:1px solid #009A44;border-radius:20px;background:#fff;margin:3px}
+.filtre.actif{background:#FF7A00;color:#fff;border-color:#FF7A00}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #ddd}
+.page{display:none;padding:15px;padding-bottom:80px}.page.active{display:block}
+.badge{background:#009A44;color:#fff;padding:3px 8px;border-radius:20px;font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- ACCUEIL -->
+<div id="page-accueil" class="page active">
+  <div class="top">
+    <div class="logo">🛍️ 225</div>
+    <b>225 Market BMB</b><br><span class="vert">Vente en ligne</span>
+  </div>
+  <input id="recherche" oninput="filtrer()" placeholder="🔍 Rechercher un produit, une boutique...">
+  <div>
+    <button class="filtre actif" onclick="setCat('Toutes',this)">Toutes</button>
+    <button class="filtre" onclick="setCat('Téléphones',this)">Téléphones</button>
+    <button class="filtre" onclick="setCat('Chaussures',this)">Chaussures</button>
+    <button class="filtre" onclick="setCat('Vêtements',this)">Vêtements</button>
+  </div>
+  <div>
+    <button class="filtre actif" onclick="setVille('Toutes',this)">Toutes villes</button>
+    <button class="filtre" onclick="setVille('Abidjan',this)">Abidjan</button>
+    <button class="filtre" onclick="setVille('Cocody',this)">Cocody</button>
+    <button class="filtre" onclick="setVille('Yopougon',this)">Yopougon</button>
+  </div>
+  <p id="nb"><b>Résultats filtrés : 4 articles</b></p>
+  <div id="liste"></div>
+  <button class="btn" onclick="show('page-compte')">Créer mon compte</button>
+  <button class="btn btnVert" onclick="show('page-vendre')">+ Vendre un produit</button>
+</div>
+
+<!-- DÉTAIL -->
+<div id="page-detail" class="page">
+  <button onclick="show('page-accueil')">← Retour</button>
+  <h2 id="d-titre"></h2>
+  <img id="d-img" style="width:100%;border-radius:15px">
+  <h3 id="d-prix" class="prix"></h3>
+  <p id="d-info"></p>
+  <p>✅ Vendeur Vérifié • 🇨🇮 Côte d'Ivoire</p>
+  <button class="btn" onclick="alert('Produit réservé ! Le vendeur va te contacter')">Réserver ce produit</button>
+  <button class="btn btnVert" onclick="alert('Discussion ouverte')">Discuter dans l'appli</button>
+  <button class="btn" style="background:#25D366" onclick="alert('Ouverture WhatsApp...')">WhatsApp</button>
+</div>
+
+<!-- COMPTE -->
+<div id="page-compte" class="page">
+  <h2>Créer mon compte</h2>
+  <input id="gmail" placeholder="Gmail : mon.nom@gmail.com">
+  <button class="btn" onclick="envoyerCode()">Envoyer code de vérification</button>
+  <input id="code" placeholder="Code 6 chiffres reçu par Gmail">
+  <input id="pass" type="password" placeholder="Mot de passe 5 à 8 caractères Ex: BMB123">
+  <input id="pass2" type="password" placeholder="Confirmer mot de passe">
+  <input placeholder="Nom complet Ex: Kouassi Jean-Pierre">
+  <input placeholder="Ville Ex: Cocody, Abidjan">
+  <input placeholder="Numéro Ex: 07 07 12 34 56">
+  <select><option>CNI</option><option>Passeport</option><option>Carte scolaire</option><option>Carte de séjour</option><option>CMU</option></select>
+  <p style="font-size:12px;color:grey">Pièce confidentielle, seul Admin voit. Envoie ta photo de pièce après.</p>
+  <label><input type="checkbox" id="cgu" style="width:auto"> J'accepte les Conditions Générales</label>
+  <button class="btn" onclick="creerCompte()">Créer mon compte</button>
+  <button class="btn" style="background:#333" onclick="show('page-accueil')">Retour Accueil</button>
+</div>
+
+<!-- VENDRE -->
+<div id="page-vendre" class="page">
+  <h2>Vendre / Publier un produit</h2>
+  <input id="v-titre" placeholder="Titre Ex: iPhone 13 128Go comme neuf">
+  <select id="v-cat"><option>Téléphones</option><option>Vêtements</option><option>Chaussures</option></select>
+  <input id="v-prix" type="number" placeholder="Prix en FCFA Ex: 150000">
+  <select id="v-ville"><option>Abidjan</option><option>Cocody</option><option>Yopougon</option><option>Bouaké</option></select>
+  <textarea id="v-desc" placeholder="Description: état, accessoires..."></textarea>
+  <input placeholder="Capacité Batterie Ex: 4000 mAh (téléphones)">
+  <button class="btn" onclick="publier()">Publier mon produit</button>
+  <button class="btn" style="background:#333" onclick="show('page-accueil')">Retour</button>
+</div>
+
+<div class="nav">
+  <span onclick="show('page-accueil')">🏠<br>Accueil</span>
+  <span onclick="show('page-vendre')">➕<br>Vendre</span>
+  <span onclick="alert('Discussions - Bientôt')">💬<br>Discussions</span>
+  <span onclick="show('page-compte')">👤<br>Profil</span>
+</div>
+
+<script>
+let produits=[
+ {titre:"Samsung Galaxy A25",ville:"Abidjan",cat:"Téléphones",prix:125000,vendeur:"kouassi225",img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=300"},
+ {titre:"Basket Nike Air",ville:"Yopougon",cat:"Chaussures",prix:35000,vendeur:"bmb_shop",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300"},
+ {titre:"Samsung S22",ville:"Abidjan",cat:"Téléphones",prix:145000,vendeur:"kouassi225",img:"https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=300"},
+ {titre:"Samsung A15",ville:"Cocody",cat:"Téléphones",prix:99000,vendeur:"shop_ci",img:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=300"},
+];
+let catAct="Toutes", villeAct="Toutes";
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+function setCat(c,el){catAct=c;document.querySelectorAll('.filtre').forEach(b=>b.classList.remove('actif'));el.classList.add('actif');filtrer()}
+function setVille(v,el){villeAct=v;filtrer()}
+function filtrer(){
+  let q=document.getElementById('recherche').value.toLowerCase();
+  let res=produits.filter(p=>{
+    let okQ=!q||p.titre.toLowerCase().includes(q)||p.ville.toLowerCase().includes(q)||p.vendeur.toLowerCase().includes(q);
+    let okC=catAct=="Toutes"||p.cat==catAct;
+    let okV=villeAct=="Toutes"||p.ville==villeAct;
+    return okQ&&okC&&okV;
+  });
+  document.getElementById('nb').innerHTML="<b>Résultats filtrés : "+res.length+" articles</b>";
+  document.getElementById('liste').innerHTML=res.length?res.map((p,i)=>`<div class="card" onclick="voir(${produits.indexOf(p)})"><img src="${p.img}"><div><b>${p.titre}</b><br><span class="prix">${p.prix} FCFA</span><br>${p.ville} • ${p.cat} • ${p.vendeur}</div></div>`).join(''):"<p>Aucun résultat, essaie une autre ville</p>";
+}
+function voir(i){
+  let p=produits[i];
+  document.getElementById('d-titre').innerText=p.titre;
+  document.getElementById('d-img').src=p.img;
+  document.getElementById('d-prix').innerText=p.prix+" FCFA";
+  document.getElementById('d-info').innerText=p.ville+" • "+p.cat+" • Vendeur: "+p.vendeur;
+  show('page-detail');
+}
+function envoyerCode(){
+  let g=document.getElementById('gmail').value;
+  if(!g.includes('@gmail.com')){alert('Mets un vrai Gmail');return}
+  alert('Code envoyé à ton Gmail - Ex: 482915 - Mets ce code');
+}
+function creerCompte(){
+  let p=document.getElementById('pass').value, p2=document.getElementById('pass2').value;
+  if(p.length<5||p.length>8){alert('Mot de passe 5 à 8 caractères');return}
+  if(p!=p2){alert('Les 2 mots de passe sont différents');return}
+  if(!document.getElementById('cgu').checked){alert('Coche les Conditions Générales');return}
+  alert("Compte créé ! L'administration doit d'abord confirmer ton inscription. Tu peux acheter et réserver, mais pas encore vendre.");
+  show('page-accueil');
+}
+function publier(){
+  let t=document.getElementById('v-titre').value, pr=document.getElementById('v-prix').value;
+  if(!t||!pr){alert('Mets titre + prix');return}
+  produits.unshift({titre:t,ville:document.getElementById('v-ville').value,cat:document.getElementById('v-cat').value,prix:pr,vendeur:"toi",img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300"});
+  alert('Produit envoyé à l\'Admin pour validation');
+  filtrer();show('page-accueil');
+}
+filtrer();
+</script>
+</body>
+</html>
